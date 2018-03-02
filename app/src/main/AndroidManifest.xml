@@ -14,9 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".hr.math.android.kuharica.activity.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,18 +23,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddRecipeActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".Test"></activity>
-        <activity android:name=".ReceptActivity"
+        <activity android:name=".hr.math.android.kuharica.activity.AddRecipeActivity" />
+        <activity android:name=".hr.math.android.kuharica.activity.SearchActivity" />
+        <activity android:name=".hr.math.android.kuharica.core.Test"></activity>
+        <activity android:name=".hr.math.android.kuharica.activity.ReceptActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"></activity>
-        <activity android:name=".NovaKategorijaActivity"></activity>
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true"></activity>
-        <activity android:name=".CategoryActivity">
+        <activity android:name=".hr.math.android.kuharica.activity.NovaKategorijaActivity"></activity>
+
+        <activity android:name=".hr.math.android.kuharica.activity.CategoryActivity" />
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".hr.math.android.kuharica.activity.MainActivity"/>
     </application>
 
 </manifest>

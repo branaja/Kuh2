@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="hr.math.android.kuharica.NovaKategorijaActivity">
+    tools:context="hr.math.android.kuharica.hr.math.android.kuharica.activity.NovaKategorijaActivity">
 
     <com.github.clans.fab.Label
         android:layout_width="match_parent"

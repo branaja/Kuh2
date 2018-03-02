@@ -1,26 +1,24 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.DBRAdapter;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Kategorija;
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Recept;
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.ReceptAdapter;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -61,7 +59,6 @@ public class CategoryActivity extends AppCompatActivity {
         super.onResume();
 
         db.open();
-        List<Recept> recepti = db.getAllReceptiFromKategorija(mcategory.getId());
         adapter.setData(db.getAllReceptiFromKategorija(mcategory.getId()));
         db.close();
 
@@ -85,9 +82,8 @@ public class CategoryActivity extends AppCompatActivity {
                 ++i;
             }
 
-            for(Recept r : odabrani){
-                bundle.putLongArray("ids", ids);
-            }
+            bundle.putLongArray("ids", ids);
+
         }
 
         // call superclass to save any view hierarchy
@@ -175,5 +171,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     public void noviRecept(View view) {
         Toast.makeText(this, "Dodaj novi recept", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AddRecipeActivity.class);
+        startActivity(intent);
     }
 }

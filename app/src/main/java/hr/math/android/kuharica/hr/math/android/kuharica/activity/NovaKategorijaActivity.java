@@ -1,11 +1,10 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.activity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +22,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.DBRAdapter;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Kategorija;
+import hr.math.android.kuharica.R;
 
 public class NovaKategorijaActivity extends AppCompatActivity {
 
@@ -164,7 +167,7 @@ public class NovaKategorijaActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
+
 
         if(imeKategorije.getText().toString() != null) {
             bundle.putString("ime", imeKategorije.getText().toString());
@@ -174,6 +177,7 @@ public class NovaKategorijaActivity extends AppCompatActivity {
             Log.w("pathsaveinstancestate", "" + path);
             bundle.putString("path", path);
         }
+        super.onSaveInstanceState(bundle);
     }
 
     @Override

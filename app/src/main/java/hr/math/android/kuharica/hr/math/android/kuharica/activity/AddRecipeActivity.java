@@ -1,4 +1,4 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,18 +10,19 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.renderscript.Script;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -29,10 +30,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.DBRAdapter;
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Kategorija;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Recept;
+import hr.math.android.kuharica.Utility;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
@@ -52,6 +58,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     Boolean flag;
     Uri imageURI;
     String currentImagePath;
+
+    Kategorija izabrana_kategorija;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +110,32 @@ public class AddRecipeActivity extends AppCompatActivity {
             stepView.setAdapter(adapterSteps);
             ivImage = (ImageView)findViewById(R.id.recipeImage);
         }
+
+        DBRAdapter db = new DBRAdapter(this);
+        db.open();
+        final List<Kategorija> temp  = db.getAllKategorije();
+        db.close();
+        ArrayList<String> lista_kategorija = new ArrayList<String>();
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        for(Kategorija k:temp)
+            lista_kategorija.add(k.getImeKategorije());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lista_kategorija);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                izabrana_kategorija=temp.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                izabrana_kategorija=temp.get(0);
+            }
+        });
+
     }
 
     @Override
@@ -266,8 +300,9 @@ public class AddRecipeActivity extends AppCompatActivity {
             recept.setUpute(stepList);
             recept.setSastojci(ingredientList);
             recept.setBrOsoba(peopleText);
-            if(!currentImagePath.isEmpty()) recept.setPhotoRecept(currentImagePath);
-            else recept.setPhotoRecept(null);
+            if(currentImagePath!=null)
+                if(!currentImagePath.isEmpty()) recept.setPhotoRecept(currentImagePath);
+                else recept.setPhotoRecept(null);
 
             DBRAdapter db = new DBRAdapter(this);
             db.open();
@@ -277,7 +312,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             Log.w("MojaKlasa:", receptIzBaze.getImeRecepta());
             Log.w("MojaKlasa:", receptIzBaze.getNotes());
 
-            db.insertReceptUKategoriju(db.getAllKategorije().get(2), recept);
+            db.insertReceptUKategoriju(izabrana_kategorija, recept);
 
             db.close();
         } else {
@@ -306,6 +341,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             db.updateRecept(recept);
             db.close();
         }
+        onBackPressed();
     }
 
     public void selectImage(View view) {

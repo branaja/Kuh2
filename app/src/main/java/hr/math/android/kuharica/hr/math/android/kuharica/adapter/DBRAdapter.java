@@ -1,4 +1,4 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Kategorija;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Recept;
 
 /**
  * Created by mabel on 27-Feb-18.

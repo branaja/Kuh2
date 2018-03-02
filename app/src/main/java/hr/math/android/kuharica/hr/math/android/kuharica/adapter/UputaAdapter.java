@@ -1,18 +1,9 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.adapter;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.CountDownTimer;
-import android.provider.AlarmClock;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Uputa;
 
 /**
  * Created by Branimirko on 27/02/18.

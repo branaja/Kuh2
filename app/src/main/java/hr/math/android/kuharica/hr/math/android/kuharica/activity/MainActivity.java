@@ -1,4 +1,4 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import java.util.Arrays;
+import java.util.List;
+
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.DBRAdapter;
+import hr.math.android.kuharica.hr.math.android.kuharica.fragment.FAMFragment;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Kategorija;
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Recept;
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.KategorijaAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         initializeDatabase();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -110,17 +115,6 @@ public class MainActivity extends AppCompatActivity {
              db.insertKategorija(kat1);
          }
 
-         for(Kategorija k : db.getAllKategorije()) {
-             Log.w("kategorije", "slika " + k.getPhotoKategorije());
-         }
-        Log.w("broj osoba: " , db.getAllRecepti("") + " " + db.getAllRecepti("").get(0).getBrOsoba() +
-                " "  + db.getAllRecepti("").get(1).getBrOsoba());
-
-         Recept r = db.getAllRecepti("").get(0);
-         Log.w("recept", r.getSastojci().toString());
-         r.setSastojci(Arrays.asList("probaaaa", "2"));
-         db.updateRecept(r);
-         Log.w("recept", r.getSastojci().toString());
         kategorijaAdapter = new KategorijaAdapter(db.getAllKategorije(), this, recyclerView);
         recyclerView.setAdapter(kategorijaAdapter);
         db.close();
@@ -172,6 +166,39 @@ public class MainActivity extends AppCompatActivity {
         kategorijaAdapter.setData(db.getAllKategorije());
         db.close();
         kategorijaAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        List<Kategorija> odabrani = kategorijaAdapter.getSelectedItems();
+        if(odabrani != null){
+            long[] ids = new long[odabrani.size()];
+
+            int i = 0;
+            for(Kategorija r : odabrani){
+                ids[i] = r.getId();
+                ++i;
+            }
+
+            bundle.putLongArray("ids", ids);
+            Log.e("OVOOOOOOOOOOOOOOOOO", String.valueOf(ids.length));
+        }
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            long[] ids = savedInstanceState.getLongArray("ids");
+
+            if(ids != null){
+                kategorijaAdapter.setSelectedData(ids);
+                kategorijaAdapter.notifyDataSetChanged();
+            }
+        }
+
     }
 
 

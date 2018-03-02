@@ -1,4 +1,4 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
+
+import hr.math.android.kuharica.R;
 
 /**
  * Created by mabel on 27-Feb-18.

@@ -1,10 +1,11 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,80 +17,37 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.DBRAdapter;
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Recept;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Sastojak;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Uputa;
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.SastojciAdapter;
+import hr.math.android.kuharica.hr.math.android.kuharica.adapter.UputaAdapter;
 
 public class ReceptActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recept);
-
-        //String name = savedInstanceState.getString("recipeName");
-        String name = "test_ime";
-        //long ID = savedInstanceState.getLong("recipeID");
-        long ID = 12345;
-        TextView name_text = (TextView) findViewById(R.id.recipeName);
-        name_text.setText(name);
-        DBRAdapter db = new DBRAdapter(this);
-        db.open();
-        Recept test_recept = new Recept();
-        test_recept.setId(ID);
-        test_recept.setImeRecepta(name);
-        List<String> temp_list = new ArrayList<String>();
-        temp_list.add("prvi");
-        temp_list.add("drugi");
-        temp_list.add("treci");
-        test_recept.setSastojci(temp_list);
-        test_recept.setNotes("blabla blabla bla");
-        test_recept.setUpute(Arrays.asList("korak 1","korak 2", "korak 3"));
-        test_recept.setPhotoRecept("");
-
-        db.insertRecept(test_recept);
-
-        Recept current = db.getReceptZaId(ID);
-        List<String> sastojci = current.getSastojci();
-        List<String> upute = current.getUpute();
-        ListView lista = (ListView) findViewById(R.id.sastojci_list);
-        /*
-        ArrayList<Sastojak> temp = new ArrayList<>();
-        for (String s: temp_list) {
-            Sastojak sas = new Sastojak();
-            sas.setSastojak(s);
-            sas.setSelected(false);
-            temp.add(sas);
-        }
-        SastojciAdapter adapter_sastojci = new SastojciAdapter(this, temp);
-        lista.setAdapter(adapter_sastojci);
-        setListViewHeightBasedOnChildren(lista);
-        */
 
     private int stari = 1;
     private long ID=0;
     private Context ctx;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ctx = this;
@@ -106,7 +64,7 @@ public class ReceptActivity extends AppCompatActivity {
             }
         });
 
-
+        ImageView header = (ImageView) findViewById(R.id.bgheader);
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
@@ -114,7 +72,7 @@ public class ReceptActivity extends AppCompatActivity {
         collapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
 
 
-        ID = getIntent().getLongExtra("ID", 0);
+        ID = getIntent().getLongExtra("Id", 0);
 
 
 
@@ -147,22 +105,40 @@ public class ReceptActivity extends AppCompatActivity {
         String name = current.getImeRecepta();
         String photo = current.getPhotoRecept();
 
-        if(photo!=null)
-            try {
-                File f=new File(photo);
 
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                Drawable d = new BitmapDrawable(getResources(), b);
-                toolbar.setBackground(d);
+        int vrijednost=0;
+        boolean uDrawableFolderu = true;
+        if(photo == null) {
+            vrijednost = R.drawable.default_kategorija;
+        } else {
+            //vidi jel slika spremljena vani ili u drawable
+            try {
+                vrijednost = Integer.parseInt(photo);
+            } catch (Exception e){
+                uDrawableFolderu = false;
             }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-        else
-        {
-            toolbar.setBackground(getResources().getDrawable(R.drawable.cake));
         }
+
+        if(uDrawableFolderu && photo!=null) {
+            File f=new File(photo);
+
+            try {
+                Picasso.with(ctx).load(vrijednost)
+                        .placeholder(R.drawable.default_kategorija).into(header);
+
+            } catch (Exception e)
+            {
+
+            }
+        } else {
+
+            header.setBackground(getResources().getDrawable(R.drawable.default_kategorija));
+
+
+
+        }
+
+
 
         collapsingToolbar.setTitle(name);
 
@@ -299,7 +275,7 @@ public class ReceptActivity extends AppCompatActivity {
             else
                 izlaz += temp;
             pocetak = kraj + b.length();
-            }
+        }
         izlaz+=ulaz.substring(pocetak,ulaz.length());
         return izlaz;
     }

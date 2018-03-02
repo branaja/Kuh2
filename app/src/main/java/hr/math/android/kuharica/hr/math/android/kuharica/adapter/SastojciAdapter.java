@@ -1,4 +1,4 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -10,6 +10,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Sastojak;
 
 /**
  * Created by Branimirko on 27/02/18.

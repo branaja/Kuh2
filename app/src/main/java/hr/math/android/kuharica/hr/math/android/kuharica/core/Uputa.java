@@ -1,4 +1,4 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.core;
 
 /**
  * Created by Branimirko on 28/02/18.

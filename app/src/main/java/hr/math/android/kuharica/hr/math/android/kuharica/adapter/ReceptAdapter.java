@@ -1,14 +1,14 @@
-package hr.math.android.kuharica;
+package hr.math.android.kuharica.hr.math.android.kuharica.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
+import hr.math.android.kuharica.R;
+import hr.math.android.kuharica.hr.math.android.kuharica.activity.ReceptActivity;
+import hr.math.android.kuharica.hr.math.android.kuharica.core.Recept;
 
 /**
  * Created by mabel on 28-Feb-18.
@@ -93,6 +96,22 @@ public class ReceptAdapter extends RecyclerView.Adapter<ReceptAdapter.ViewHolder
         }
     };
 
+    private void loadImageFromStorage(String path, ReceptAdapter.ViewHolder holder)
+    {
+
+        try {
+            File f=new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+
+            holder.image.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView imeRecepta;
@@ -108,18 +127,32 @@ public class ReceptAdapter extends RecyclerView.Adapter<ReceptAdapter.ViewHolder
             cardView = (CardView) v.findViewById(R.id.kartica);
         }
 
+
         void update(final Recept r) {
 
             imeRecepta.setText(r.getImeRecepta());
             //ako je photoKategorije null onda se uzima defaultni
             int vrijednost = 1;
-            if (r.getPhotoRecept() == null) {
+            String path = r.getPhotoRecept();
+            boolean uDrawableFolderu = true;
+            if(path == null) {
                 vrijednost = R.drawable.default_recept;
             } else {
-                vrijednost = Integer.parseInt(r.getPhotoRecept());
+                //vidi jel slika spremljena vani ili u drawable
+                try {
+                    vrijednost = Integer.parseInt(path);
+                } catch (Exception e){
+                    uDrawableFolderu = false;
+                }
             }
-            Picasso.with(context).load(vrijednost)
-                    .placeholder(R.drawable.default_recept).into(image);
+
+            if(uDrawableFolderu) {
+                Picasso.with(context).load(vrijednost)
+                        .placeholder(R.drawable.default_recept).into(image);
+            } else {
+                loadImageFromStorage(r.getPhotoRecept(), this);
+            }
+
 
             if (selRecepti != null) {
                 if (selRecepti.contains(r)) {
